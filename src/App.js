@@ -1,7 +1,11 @@
+import { useState } from "react";
 import "./styles.css";
 
 const isWin = (pieces, x, y) => {
   const piece = pieces[y][x];
+  if (!piece) {
+    return false;
+  }
   const L = pieces[y][(x + 2) % 3];
   const R = pieces[y][(x + 1) % 3];
   const U = pieces[(y + 2) % 3][x];
@@ -34,37 +38,79 @@ const svgPieces = {
   )
 };
 
-const Square = ({ piece, isWin }) => (
-  <div className={isWin ? "square isWin" : "square"}>
+const Square = ({ piece, isWin, onClick }) => (
+  <div className={isWin ? "square isWin" : "square"} onClick={onClick}>
     {(piece && svgPieces[piece]) || []}
   </div>
 );
 
-const Board = ({ pieces }) => (
+const Board = ({ pieces, onSpaceSelected }) => (
   <div className="board">
     {pieces.map((row, y) =>
       row.map((piece, x) => (
-        <Square piece={piece} isWin={isWin(pieces, x, y)} />
+        <Square
+          piece={piece}
+          onClick={() => onSpaceSelected(x, y)}
+          isWin={isWin(pieces, x, y)}
+        />
       ))
     )}
   </div>
 );
 
 export default function Game() {
+  const newGameState = () => ({
+    pieces: [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null]
+    ],
+    nextPlayer: "X",
+    turnNumber: 1,
+    winner: null
+  });
+
+  const [state, setState] = useState(newGameState());
+
+  const resetGame = () => {
+    setState(newGameState);
+  };
+
+  const onSpaceSelected = (x, y) => {
+    if (state.winner || state.pieces[y][x]) {
+      return;
+    }
+    const pieces = state.pieces.map((row) => row.slice());
+    pieces[y][x] = state.nextPlayer;
+    const didWin = isWin(pieces, x, y);
+    const winner = didWin ? state.nextPlayer : state.winner;
+    const nextPlayer = (state.nextPlayer === "X") !== didWin ? "O" : "X";
+    const turnNumber = state.turnNumber + 1;
+    setState({
+      ...state,
+      pieces,
+      nextPlayer,
+      turnNumber,
+      winner
+    });
+  };
+
   return (
-    <div className="game">
+    <div className={state.winner ? "game ended" : "game"}>
       <div className="header">
-        Next Player:
-        <div className="icon">{svgPieces.X}</div>
+        {state.turnNumber > 9 ? (
+          "Tie Game!"
+        ) : (
+          <>
+            {state.winner ? "Winner:" : "Next Player:"}
+            <div className="icon">{svgPieces[state.nextPlayer]}</div>
+          </>
+        )}
       </div>
-      <Board
-        pieces={[
-          ["O", "X", "O"],
-          ["O", "X", "O"],
-          ["X", "X", "X"]
-        ]}
-      />
-      <button className="newGame">New Game</button>
+      <Board pieces={state.pieces} onSpaceSelected={onSpaceSelected} />
+      <button className="newGame" onClick={resetGame}>
+        New Game
+      </button>
     </div>
   );
 }

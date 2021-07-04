@@ -58,7 +58,7 @@
   stroke: #f33;
 }
 
-.square:empty:hover {
+.game:not(.ended) .square:empty:hover {
   background-color: white;
   border-color: #88f;
   cursor: pointer;
