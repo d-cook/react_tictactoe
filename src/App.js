@@ -16,14 +16,17 @@ const svgPieces = {
 
 const Square = ({ piece, isWin }) => (
   <div className={isWin ? "square isWin" : "square"}>
-    {svgPieces[piece] || []}
+    {(piece && svgPieces[piece]) || []}
   </div>
 );
 
 export default function App() {
   return (
     <div className="App">
-      <div className="header">Next Player: X</div>
+      <div className="header">
+        Next Player:
+        <div className="icon">{svgPieces.X}</div>
+      </div>
       <div className="board">
         <Square piece="X" isWin={true} />
         <Square piece="O" />
@@ -35,6 +38,7 @@ export default function App() {
         <Square piece="" />
         <Square piece="X" isWin={true} />
       </div>
+      <button className="newGame">New Game</button>
     </div>
   );
 }
