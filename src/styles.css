@@ -1,0 +1,58 @@
+.App {
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 1em;
+  flex-grow: 1 auto;
+  padding: 1em;
+  height: 300px;
+}
+
+.header {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+  align-self: center;
+}
+
+.board {
+  display: grid;
+  background-color: #f8f8f8;
+  border: 4px solid #ccc;
+  border-radius: 1em;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  padding: 0.75em;
+  grid-gap: 0.75em;
+  width: 250px;
+  height: 250px;
+}
+
+.square {
+  font-weight: bold;
+  font-size: 24px;
+  border: 3px solid #ddd;
+  border-radius: 0.5em;
+  display: grid;
+}
+
+.square svg {
+  stroke: #333;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.square.isWin {
+  border-color: #f88;
+  background-color: #fee;
+}
+
+.square.isWin svg {
+  stroke: #f33;
+}
+
+.square:empty:hover {
+  background-color: white;
+  border-color: #88f;
+  cursor: pointer;
+}
