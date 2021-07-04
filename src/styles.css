@@ -1,4 +1,4 @@
-.App {
+.game {
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@
   display: grid;
 }
 
-svg {
+.game svg {
   stroke: #333;
   stroke-linecap: round;
   fill: none;
